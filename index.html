@@ -948,18 +948,18 @@
             }
         });
 
-        function openModal(element) {
-    // 1. Lấy thông tin từ card được chọn
-    const imgSrc = element.getAttribute('data-img');
-    const name = element.getAttribute('data-name');
-    
-    // 2. Gán thông tin vào Modal
-    document.getElementById('modal-cv-img').src = imgSrc;
-    document.getElementById('modal-name').textContent = name;
-    
-    // 3. Hiển thị modal (theo class hoặc style của bạn)
-    document.getElementById('myModal').style.display = 'block';
-}
+    function openModal(element) {
+            // 1. Lấy thông tin từ card được chọn
+            const imgSrc = element.getAttribute('data-img');
+            const name = element.getAttribute('data-name');
+            
+            // 2. Gán thông tin vào Modal
+            document.getElementById('modal-cv-img').src = imgSrc;
+            document.getElementById('modal-name').textContent = name;
+            
+            // 3. Hiển thị modal
+            document.getElementById('member-modal').classList.add('show');
+        }
     </script>
 </body>
 </html>
