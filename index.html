@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Trong Nghiên Cứu Khoa Học | Ozone plus one</title>
+    <style>
+        /* CSS Variables - Bảng màu theo yêu cầu */
+        :root {
+            --dark-blue: #223148;
+            --medium-blue: #2f486d;
+            --beige-light: #f3eae0;
+            --white: #ffffff;
+            --text-dark: #333333;
+        }
+
+        /* Reset & Base Styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; scroll-behavior: smooth; }
+        body { background-color: var(--beige-light); color: var(--text-dark); overflow-x: hidden; }
+
+        /* --- THANH HEADER CỐ ĐỊNH --- */
+        header { background-color: var(--dark-blue); color: var(--white); padding: 15px 5%; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .header-left { display: flex; align-items: center; }
+        .logo-wrapper { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--white); cursor: pointer; }
+        .nav-logo-img { width: 40px; height: 40px; object-fit: contain; transition: transform 0.3s ease; }
+        .logo-wrapper:hover .nav-logo-img { transform: scale(1.1) rotate(5deg); }
+        .logo { font-size: 1.5rem; font-weight: bold; letter-spacing: 1px; }
+
+        /* Nút Back */
+        .back-link { color: var(--white); text-decoration: none; display: flex; align-items: center; gap: 15px; transition: color 0.3s; }
+        .back-link:hover { color: #8da4c8; }
+        .back-icon { font-size: 2rem; line-height: 1; }
+        .underlined-title { font-size: 1.5rem; border-bottom: 2px solid var(--white); padding-bottom: 5px; letter-spacing: 1px; }
+
+        /* --- MENU CHÍNH --- */
+        nav ul { list-style: none; display: flex; gap: 25px; align-items: center; }
+        nav a.nav-link, nav a.dropbtn { color: var(--white); text-decoration: none; font-weight: 600; padding: 8px 18px; border: 2px solid rgba(255, 255, 255, 0.3); border-radius: 8px; transition: all 0.3s ease; background-color: rgba(255, 255, 255, 0.05); cursor: pointer; display: inline-block; }
+        nav a.nav-link:hover, nav a.dropbtn:hover { background-color: var(--white); color: var(--dark-blue); border-color: var(--white); transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); }
+
+        /* --- MENU XỔ XUỐNG --- */
+        nav ul li { position: relative; }
+        .dropdown-content { display: none; position: absolute; top: 100%; left: 0; background-color: var(--dark-blue); min-width: 180px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; flex-direction: column; gap: 5px; padding: 10px; }
+        .dropdown:hover .dropdown-content { display: flex; animation: fadeIn 0.3s ease-in-out; }
+        .dropdown:hover .dropbtn { background-color: var(--white); color: var(--dark-blue); border-color: var(--white); }
+        .dropdown-content a { border: none; padding: 10px 15px; font-weight: 500; background-color: transparent; color: var(--white); border-radius: 5px; text-align: left; white-space: nowrap; text-decoration: none; }
+        .dropdown-content a:hover { background-color: rgba(255, 255, 255, 0.2); color: var(--white); }
+
+        /* --- QUẢN LÝ SECTION --- */
+        section { display: none; min-height: 100vh; padding: 120px 10% 50px 10%; flex-direction: column; justify-content: center; animation: fadeIn 0.5s ease-in-out; }
+        section.active { display: flex; }
+        h2.section-title { color: var(--dark-blue); text-align: center; margin-bottom: 40px; font-size: 2.5rem; text-transform: uppercase; }
+
+        /* --- HOME --- */
+        #home { background: linear-gradient(135deg, var(--dark-blue), var(--medium-blue)); color: var(--white); text-align: center; align-items: center; }
+        #typing-container { font-size: 3rem; font-weight: bold; min-height: 140px; margin: 0 auto 20px auto; width: fit-content; padding: 30px 50px; border: 3px solid var(--white); border-radius: 15px; background-color: rgba(255, 255, 255, 0.1); box-shadow: 0 10px 20px rgba(0,0,0,0.2); white-space: pre-wrap; }
+        .quote { font-size: 1.2rem; font-style: italic; margin-top: 50px; opacity: 0.8; max-width: 800px; }
+
+        /* --- ABOUT & TEAM --- */
+        #about { background-color: var(--white); }
+        #team { background-color: var(--beige-light); }
+        .about-content { display: flex; gap: 40px; align-items: center; }
+        .about-text { flex: 1; font-size: 1.2rem; line-height: 1.8; }
+        .about-image { flex: 1; height: 300px; background-color: var(--medium-blue); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
+        .team-container { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
+        .team-container:hover .member:not(:hover) { opacity: 0.4; filter: blur(2px); }
+        .member { width: 250px; text-align: center; transition: all 0.4s ease; background: var(--white); padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); cursor: pointer; }
+        .member:hover { transform: translateY(-10px) scale(1.05); box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
+        .avatar { width: 150px; height: 150px; border-radius: 50%; background-color: var(--medium-blue); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; }
+        .member h3 { color: var(--dark-blue); margin-bottom: 5px; }
+        .member p { font-style: italic; color: #666; }
+        #team-trigger { cursor: pointer; border-bottom: 3px dashed var(--dark-blue); transition: color 0.3s, border-color 0.3s; }
+        #team-trigger:hover { color: #4a6c9c; border-color: #4a6c9c; }
+
+        /* --- NCKH TỔNG QUAN --- */
+        #nckh { background-color: var(--white); }
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .tool-card { background: var(--beige-light); padding: 30px; border-radius: 15px; border-top: 5px solid var(--medium-blue); transition: transform 0.3s; }
+        .tool-card:hover { transform: translateY(-10px); }
+        .tool-card h3 { color: var(--dark-blue); margin-bottom: 15px; }
+        .tool-card ul { padding-left: 20px; line-height: 1.8; }
+
+        /* --- TÌM KIẾM, PHÂN TÍCH, TRÍCH DẪN (Dùng chung Layout) --- */
+        #nckh-search { background-color: var(--beige-light); }
+        #nckh-analysis { background-color: var(--white); }
+        #nckh-citation { background-color: var(--beige-light); }
+        
+        .search-layout { display: flex; gap: 20px; align-items: flex-start; margin-top: 20px; }
+        .search-sidebar { width: 25%; display: flex; flex-direction: column; gap: 15px; }
+        
+        .tab-btn { background-color: var(--white); color: var(--dark-blue); border: 2px solid var(--medium-blue); padding: 15px 20px; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; text-align: center; border-radius: 8px; box-shadow: 2px 4px 10px rgba(0,0,0,0.05); }
+        .tab-btn:hover { background-color: #e2ebf5; }
+        
+        /* Trạng thái được chọn cho tab Tìm kiếm */
+        .tab-btn.active { background-color: var(--medium-blue); color: var(--white); transform: scale(1.05); box-shadow: 0 5px 15px rgba(47, 72, 109, 0.4); }
+
+        /* Hiệu ứng HOVER: Chỉ sáng lên khi đang đưa chuột vào */
+        .analysis-tab:hover, .citation-tab:hover { background-color: var(--medium-blue); color: var(--white); transform: scale(1.05); box-shadow: 0 5px 15px rgba(47, 72, 109, 0.4); }
+
+        .search-content-area { width: 75%; background-color: var(--white); border: 3px solid var(--medium-blue); border-radius: 10px; padding: 40px; min-height: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
+        
+        /* Chức năng riêng của Tìm kiếm TLTK */
+        .tab-content { display: none; animation: fadeIn 0.4s; }
+        .tab-content.active { display: block; }
+        .tab-content h3 { color: var(--dark-blue); font-size: 1.8rem; margin-bottom: 15px; border-bottom: 2px dashed #ccc; padding-bottom: 10px; }
+        .tab-content h4 { color: var(--medium-blue); font-size: 1.2rem; margin: 20px 0 10px 0; }
+        .tab-content p { line-height: 1.8; font-size: 1.1rem; text-align: justify; }
+
+        /* --- CHỨC NĂNG RIÊNG CỦA PHÂN TÍCH & TRÍCH DẪN --- */
+        .hover-placeholder { text-align: center; color: #999; font-style: italic; margin: auto; font-size: 1.2rem; }
+        .hover-cards-container { display: none; flex-direction: column; width: 100%; margin: auto; animation: fadeIn 0.4s; }
+        
+        .action-card { flex: 1; background-color: var(--white); border: 3px solid var(--medium-blue); border-radius: 10px; padding: 50px 20px; text-align: center; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; }
+        .action-card h3 { color: var(--dark-blue); font-size: 1.5rem; transition: color 0.3s; }
+        .action-card:hover { background-color: var(--medium-blue); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .action-card:hover h3 { color: var(--white); }
+
+        /* --- WORK & CONTACT --- */
+        #contact { background-color: var(--white); }
+        .contact-container { display: flex; gap: 40px; align-items: stretch; }
+        .contact-box-left { flex: 1; border: 3px solid var(--medium-blue); padding: 40px; border-radius: 10px; background-color: var(--beige-light); }
+        .contact-box-right { flex: 1; border: 3px solid var(--medium-blue); padding: 40px; border-radius: 10px; background-color: var(--beige-light); display: flex; flex-direction: column; gap: 30px; }
+        .contact-box-left h3 { color: var(--dark-blue); margin-bottom: 20px; font-size: 1.5rem; text-align: center; }
+        .contact-box-left input, .contact-box-left textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; }
+        .contact-box-left button { background-color: var(--medium-blue); color: white; border: none; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1.1rem; transition: background 0.3s; }
+        .contact-box-left button:hover { background-color: var(--dark-blue); }
+        
+        .video-container { width: 100%; height: 250px; border-radius: 10px; overflow: hidden; border: 2px solid var(--medium-blue); }
+        .contact-info-text { font-size: 1.2rem; line-height: 2; color: var(--text-dark); }
+        .contact-info-text h3 { color: var(--dark-blue); margin-bottom: 10px; border-bottom: 2px solid var(--medium-blue); display: inline-block; }
+
+        footer { text-align: center; padding: 20px; background-color: var(--dark-blue); color: var(--white); }
+
+        /* --- POPUP (MODAL) CHUNG --- */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); z-index: 1001; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
+        .modal-overlay.show { display: flex; opacity: 1; }
+        .modal-content { background-color: var(--white); padding: 40px; border-radius: 15px; width: 90%; max-width: 700px; text-align: center; position: relative; transform: translateY(-20px); transition: transform 0.3s ease; box-shadow: 0 15px 30px rgba(0,0,0,0.3); }
+        .modal-overlay.show .modal-content { transform: translateY(0); }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; color: #999; cursor: pointer; transition: color 0.3s; z-index: 2; }
+        .close-btn:hover { color: red; }
+        
+        /* Khung Modal chứa nội dung lớn */
+        .modal-large { max-width: 900px; text-align: left; max-height: 85vh; overflow-y: auto; }
+        .modal-avatar { width: 120px; height: 120px; border-radius: 50%; background-color: var(--medium-blue); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; color: white; }
+        .modal-name { color: var(--dark-blue); margin-bottom: 10px; font-size: 1.8rem; }
+        .modal-slogan { font-style: italic; color: #666; margin-bottom: 20px; font-weight: bold; }
+        .modal-desc { line-height: 1.6; color: var(--text-dark); text-align: justify; }
+
+        /* --- HIỆU ỨNG CHUYỂN TRANG MÀN HÌNH --- */
+        .page-transition { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: var(--dark-blue); z-index: 9999; opacity: 0; visibility: hidden; transition: opacity 0.4s ease-in-out, visibility 0.4s; display: flex; align-items: center; justify-content: center; }
+        .page-transition.active { opacity: 1; visibility: visible; }
+        .transition-logo { color: var(--white); font-size: 2.5rem; font-weight: bold; letter-spacing: 2px; animation: pulse 0.6s infinite alternate; }
+        @keyframes pulse { from { transform: scale(1); opacity: 0.7; } to { transform: scale(1.1); opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- NÚT TRUY CẬP CÔNG CỤ TỪ KHOÁ --- */
+        .tool-link-btn {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 10px 25px;
+        background-color: var(--dark-blue);
+        color: var(--white);
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .tool-link-btn:hover {
+        background-color: var(--medium-blue);
+        transform: translateY(-3px);
+        color: var(--white);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Căn phải cho nút trong phần thẻ phân tích & trích dẫn */
+        .link-container-right {
+        text-align: right;
+        margin-bottom: 20px;
+        width: 100%;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- MÀN HÌNH CHUYỂN CẢNH -->
+    <div id="page-transition" class="page-transition">
+        <div class="transition-logo">Ozone plus one</div>
+    </div>
+
+    <!-- CÁC POPUP MODALS -->
+    <!-- Modal Thành viên -->
+    <div id="member-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('member-modal')">&times;</span>
+            <h3 class="modal-name" id="modal-name">Tên</h3>
+            <p class="modal-slogan" id="modal-slogan">"Slogan"</p>
+            <p class="modal-desc" id="modal-desc">Mô tả...</p>
+            <img id="modal-cv-img" src="" alt="CV Của thành viên" style=" object-fit: cover; border-radius: 0%;">
+            <h2 id="modal-name"></h2>
+        </div>
+    </div>
+
+    <!-- Modal Cả Nhóm -->
+    <div id="team-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close-btn" onclick="closeModal('team-modal')">&times;</span>
+            <h2 style="color: var(--dark-blue); margin-bottom: 20px; font-size: 2.2rem;">OZONE PLUS ONE</h2>
+            <div> <img src="https://v1.padlet.pics/3/image.webp?t=c_limit%2Cdpr_1%2Ch_914%2Cw_807&url=https%3A%2F%2Fu1.padletusercontent.com%2Fuploads%2Fpadlet-uploads-usc1%2F5856534311%2F6496e52f3ec0193b846f8494a7373fbe%2Fz7965781319511_680043cae4476ab9dd92481ee2a1cc54.jpg%3Fexpiry_token%3D5WaHZRdGG3LkUVQGy3SZ-zdRtq89aJeottSBaF_Hii8dmxJqYDvE2-MDbblcM-ZrVekXW99RReKkJFIoMoKio4NS_thEPjHdXt9FrPGKl93zlaMvZscxfYyI2oGLxa73bvEPbEKlXFxVx_A4lv2bI9cTgxXmxhRUdWRjj4sXeWWD8dKUurzsML5xj0jdSHlws4OxiCdZvl8KPd-aMKIyiK1L1KXxOWEXZ0UVK1uPWScJZoOQgqOWOBySgqZwswZQ6qD5ah6wjma1mKbF6zp5Xg%3D%3D" alt="Minh họa" style="width: 100%; height: 100%; object-fit: cover; border-radius: 15px;"> </div>
+            <p style="font-size: 1.2rem; font-weight: bold; font-style: italic; color: var(--dark-blue);">"Slogan: AI gánh team - tụi em gánh điểm"</p>
+        </div>
+    </div>
+
+    <!-- Modal Tính Năng Khám Phá Mở Rộng -->
+    <div id="feature-modal" class="modal-overlay">
+        <div class="modal-content modal-large">
+            <span class="close-btn" onclick="closeModal('feature-modal')">&times;</span>
+            <h3 class="modal-name" id="feature-modal-title" style="border-bottom: 2px dashed #ccc; padding-bottom: 15px; margin-bottom: 20px; color: var(--dark-blue); text-align: center;">Tiêu đề</h3>
+            <div class="modal-desc" id="feature-modal-desc" style="font-size: 1.15rem; line-height: 1.9; text-align: justify;">
+                Nội dung chi tiết sẽ hiện ở đây...
+            </div>
+        </div>
+    </div>
+
+    <!-- THANH ĐIỀU HƯỚNG -->
+    <header>
+        <div class="header-left">
+            <a href="#home" id="header-logo" class="logo-wrapper menu-link">
+                <img src="https://cdn-icons-png.flaticon.com/512/2099/2099058.png" alt="Logo" class="nav-logo-img">
+                <div class="logo">Ozone plus one</div>
+            </a>
+            <a href="#home" id="header-back" class="back-link menu-link" style="display: none;">
+                <span class="back-icon">←</span> 
+                <span id="dynamic-title" class="underlined-title">Tiêu đề</span>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#home" class="nav-link menu-link">Home</a></li>
+                <li class="dropdown">
+                    <a href="#about" class="dropbtn menu-link" data-title="About us">About us</a>
+                    <div class="dropdown-content">
+                        <a href="#about" class="menu-link" data-title="About us : My Project">My Project</a>
+                        <a href="#team" class="menu-link" data-title="About us : My Team">My Team</a>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a href="#nckh" class="dropbtn menu-link" data-title="NCKH">NCKH</a>
+                    <div class="dropdown-content">
+                        <a href="#nckh-search" class="menu-link" data-title="NCKH : Hỗ trợ tìm kiếm TLTK">Hỗ trợ tìm kiếm TLTK</a>
+                        <a href="#nckh-analysis" class="menu-link" data-title="NCKH : Phân tích & Tóm tắt">Phân tích & Tóm tắt</a>
+                        <a href="#nckh-citation" class="menu-link" data-title="NCKH : Trích dẫn TLTK">Trích dẫn TLTK</a>
+                    </div>
+                </li>
+                <li><a href="#contact" class="nav-link menu-link" data-title="Work & Contact">Work & Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- TRANG CHỦ -->
+        <section id="home" class="active">
+            <div id="typing-container"></div>
+        </section>
+
+        <!-- VỀ CHÚNG TÔI -->
+        <section id="about">
+            <h2 class="section-title">Mục đích trang web</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Trang web <b>AI Trong Nghiên Cứu Khoa Học</b> được phát triển bởi nhóm <b>Ozone plus one</b>.</p>
+                    <p><br>Trang web <b>HỖ TRỢ NGHIÊN CỨU KHOA HỌC TÍCH HỢP</b> được xây dựng và phát triển bởi nhóm Ozone Plus One nhằm hỗ trợ người học ứng dụng hiệu quả các công cụ trí tuệ nhân tạo (AI) trong nghiên cứu khoa học. Chúng tôi cung cấp thông tin tổng quan, hướng dẫn sử dụng và gợi ý lựa chọn các công cụ AI phù hợp với từng giai đoạn của quy trình nghiên cứu khoa học, giúp người dùng tiết kiệm thời gian, nâng cao chất lượng nghiên cứu và sử dụng AI một cách hiệu quả, có trách nhiệm.</p>
+                </div>
+                <div class="about-image">
+                    <img src="https://image.luatvietnam.vn/uploaded/twebp/images/original/2023/06/12/mo-rong-kho-tang-tri-thuc-cua-nhan-loai_1206113615.jpg" alt="Minh họa" style="width: 100%; height: 100%; object-fit: cover; border-radius: 15px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- THÀNH VIÊN NHÓM -->
+        <section id="team">
+            <h2 class="section-title">My Team - <span id="team-trigger" title="Nhấn vào để xem thông tin đội">Ozone plus one</span></h2>
+            <div class="team-container">
+
+            <div class="member-card" onclick="openModal(this)" data-img="image/CVNhu.png" data-name="Lê Ngọc Khánh Như">
+                <div class="member" data-name="Lê Ngọc Khánh Như">
+                    <div style="width: 100%; height: 250px; overflow: hidden; margin-bottom: 15px; border-radius: 8px;">
+                        <div> <img src="image/Như.jpg" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; object-position: center top;"> </div>
+                    </div>
+                    <h3>Lê Ngọc Khánh Như <br> 48.01.106.061</h3>
+                </div>
+            </div>
+
+            <div class="member-card" onclick="openModal(this)" data-img="image/CVKhanh.png" data-name="Hứa Ngọc Bảo Khanh">
+                <div class="member" data-name="Hứa Ngọc Bảo Khanh">
+                    <div style="width: 100%; height: 250px; overflow: hidden; margin-bottom: 15px; border-radius: 8px;">
+                        <div> <img src="image/Khanh.jpg" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; object-position: center top;"> </div>
+                    </div>
+                    <h3>Hứa Ngọc Bảo Khanh <br> 49.01.103.036</h3>
+                </div>
+            </div>
+
+            <div class="member-card" onclick="openModal(this)" data-img="image/CVTrieu.png" data-name="Nguyễn Quang Triệu">
+                <div class="member" data-name="Nguyễn Quang Triệu">
+                    <div style="width: 100%; height: 250px; overflow: hidden; margin-bottom: 15px; border-radius: 8px;">
+                        <div> <img src="image/Trieu.JPG" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; object-position: center top;"> </div>
+                    </div>
+                    <h3>Nguyễn Quang Triệu <br> 51.01.401.181</h3>
+                </div>
+            </div>
+
+            <div class="member-card" onclick="openModal(this)" data-img="image/CVMinh.png" data-name="Trần Nguyệt Minh">
+                <div class="member" data-name="Trần Nguyệt Minh">
+                    <div style="width: 100%; height: 250px; overflow: hidden; margin-bottom: 15px; border-radius: 8px;">
+                        <div> <img src="image/Minh.jpg" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; object-position: center top;"> </div>
+                    </div>
+                    <h3>Trần Nguyệt Minh <br> 51.01.401.089</h3>
+                </div>
+            </div>
+            
+        </section>
+
+        <!-- NCKH TỔNG QUAN -->
+        <section id="nckh">
+            <h2 class="section-title">Các Công Cụ AI Hỗ Trợ</h2>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <h3>1. Tìm Kiếm Tài Liệu</h3>
+                    <ul><li>Google Scholar</li><li>Consensus</li><li>Elicit</li></ul>
+                </div>
+                <div class="tool-card">
+                    <h3>2. Phân Tích & Tóm Tắt</h3>
+                    <ul><li>Gemini</li><li>NotebookLM</li><li>ChatGPT</li><li>Claude</li></ul>
+                </div>
+                <div class="tool-card">
+                    <h3>3. Hỗ Trợ Trích Dẫn</h3>
+                    <ul><li>Zotero</li><li>Mendeley</li></ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 1. HỖ TRỢ TÌM KIẾM TLTK -->
+        <section id="nckh-search">
+            <h2 class="section-title">Hỗ Trợ Tìm Kiếm Tài Liệu</h2>
+            <div class="search-layout">
+                <div class="search-sidebar">
+                    <button class="tab-btn active" onclick="openSearchTab(event, 'gg-scholar')">Google Scholar</button>
+                    <button class="tab-btn" onclick="openSearchTab(event, 'consensus')">Consensus</button>
+                    <button class="tab-btn" onclick="openSearchTab(event, 'elicit')">Elicit</button>
+                </div>
+                <div class="search-content-area">
+                    <div id="gg-scholar" class="tab-content active">
+                        <h3>Nội dung: Google Scholar</h3>
+                        <h4>Giới thiệu:</h4>
+                        <p>Google Scholar (Google Học giả) là công cụ tìm kiếm học thuật miễn phí của Google, giúp người dùng dễ dàng tra cứu các nguồn tài liệu khoa học uy tín như bài báo, luận văn, sách, báo cáo hội nghị, bằng sáng chế và nhiều tài liệu học thuật khác thuộc nhiều lĩnh vực nghiên cứu. <br><b>Chức năng chính:</b>
+                        <br>- Tìm kiếm tài liệu nghiên cứu từ nhiều nguồn học thuật uy tín.
+                        <br>- Hỗ trợ trích dẫn tài liệu theo các định dạng phổ biến (APA, MLA, Harvard, Chicago,...).
+                        <br>- Khám phá các bài báo liên quan, các nghiên cứu được trích dẫn nhiều và phiên bản mới nhất của tài liệu.
+                        <br>- Theo dõi số lượt trích dẫn và mức độ ảnh hưởng của các công trình nghiên cứu.
+                        <br>- Lưu và quản lý danh sách tài liệu phục vụ cho quá trình nghiên cứu.</p>
+                        <a href="https://scholar.google.com/" target="_blank" class="tool-link-btn">Truy cập Google Scholar </a>
+                    </div>
+                    <div id="consensus" class="tab-content">
+                        <h3>Nội dung: Consensus</h3>
+                        <h4>Giới thiệu:</h4>
+                        <p>Consensus là công cụ tìm kiếm học thuật ứng dụng trí tuệ nhân tạo (AI), được thiết kế để tìm kiếm, tổng hợp và trả lời câu hỏi dựa trên các nghiên cứu khoa học đã được bình duyệt (peer-reviewed). Công cụ giúp người dùng nhanh chóng tiếp cận những bằng chứng khoa học đáng tin cậy mà không cần đọc toàn bộ bài báo.<br><b>Chức năng chính:</b>
+                        <br>- Tìm kiếm và trả lời câu hỏi dựa trên bằng chứng khoa học (evidence-based).
+                        <br>- Tổng hợp và tóm tắt nội dung từ nhiều bài báo khoa học chỉ trong vài giây.
+                        <br>- Hạn chế tình trạng AI tạo ra thông tin không có căn cứ (AI hallucination) bằng cách dựa trên các nguồn nghiên cứu đã được bình duyệt.
+                        <br>- Hiển thị nguồn trích dẫn, giúp người dùng dễ dàng kiểm chứng và tra cứu tài liệu gốc.
+                        <br>- Hỗ trợ khám phá các nghiên cứu liên quan để mở rộng phạm vi tìm hiểu.</p>
+                        <a href="https://consensus.app/" target="_blank" class="tool-link-btn">Truy cập Consensus </a>
+                    </div>
+                    <div id="elicit" class="tab-content">
+                        <h3>Nội dung: Elicit</h3>
+                        <h4>Giới thiệu:</h4>
+                        <p>Elicit là trợ lý nghiên cứu ứng dụng trí tuệ nhân tạo (AI), được phát triển nhằm hỗ trợ các nhà nghiên cứu trong quá trình tổng quan tài liệu (literature review). Công cụ có khả năng tìm kiếm, phân tích và tổng hợp thông tin từ các bài báo khoa học, giúp người dùng nhanh chóng xác định những nghiên cứu liên quan ngay cả khi không sử dụng từ khóa chính xác.<br><b>Chức năng chính:</b>
+                        <br>- Tìm kiếm và đề xuất các tài liệu nghiên cứu phù hợp bằng AI.
+                        <br>- Trích xuất thông tin từ nhiều bài báo và tự động tổng hợp dưới dạng bảng (Table format).
+                        <br>- Phân tích các nội dung quan trọng như mục tiêu, phương pháp nghiên cứu, kết quả và kết luận của từng bài báo.
+                        <br>- Đọc, tóm tắt và trả lời câu hỏi trực tiếp từ các tệp PDF được tải lên.
+                        <br>- Hỗ trợ so sánh nhiều nghiên cứu, giúp tiết kiệm thời gian trong quá trình tổng quan tài liệu.</p>
+                        <a href="https://elicit.com/" target="_blank" class="tool-link-btn">Truy cập Elicit </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. PHÂN TÍCH & TÓM TẮT -->
+        <section id="nckh-analysis">
+            <h2 class="section-title">Phân Tích & Tóm Tắt Tài Liệu</h2>
+            <div class="search-layout" onmouseleave="resetHoverState('analysis')">
+                <div class="search-sidebar">
+                    <!-- Khai báo data-target để liên kết đúng bộ nút bên phải -->
+                    <button class="tab-btn analysis-tab" data-target="analysis-gemini-cards" onmouseenter="showActionCards('analysis', 'Gemini', this)">Gemini</button>
+                    <button class="tab-btn analysis-tab" data-target="analysis-chatgpt-cards" onmouseenter="showActionCards('analysis', 'ChatGPT', this)">Chat GPT</button>
+                    <button class="tab-btn analysis-tab" data-target="analysis-note-cards" onmouseenter="showActionCards('analysis', 'NotebookLM', this)">NotebookLM</button>
+                    <button class="tab-btn analysis-tab" data-target="analysis-claude-cards" onmouseenter="showActionCards('analysis', 'Claude', this)">Claude</button>
+                </div>
+                
+                <div id="analysis-section" class="search-content-area">
+                    <div id="analysis-placeholder" class="hover-placeholder">
+                        Hãy rê chuột (hover) vào một công cụ bên trái để xem tính năng.
+                    </div>
+                    
+                    <!-- BỘ NÚT CỦA GEMINI (Có 2 nút) -->
+                    <div id="analysis-gemini-cards" class="hover-cards-container">
+                        <div class="link-container-right">
+                            <a href="https://gemini.google.com/" target="_blank" class="tool-link-btn">Truy cập Gemini </a>
+                        </div>
+                        <div style="display: flex; gap: 30px; width: 100%;">
+                            <div class="action-card" onclick="openFeaturePopup('Gemini', 'Phân tích số liệu')"><h3>PHÂN TÍCH SỐ LIỆU</h3></div>
+                            <div class="action-card" onclick="openFeaturePopup('Gemini', 'Tóm tắt tài liệu tham khảo')"><h3>TÓM TẮT TÀI LIỆU THAM KHẢO</h3></div>
+                        </div>
+                    </div>
+
+                    <!-- BỘ NÚT CỦA CHATGPT (Có 2 nút) -->
+                    <div id="analysis-chatgpt-cards" class="hover-cards-container">
+                        <div class="link-container-right">
+                            <a href="https://chat.openai.com/" target="_blank" class="tool-link-btn">Truy cập ChatGPT </a>
+                        </div>
+                        <div style="display: flex; gap: 30px; width: 100%;">
+                            <div class="action-card" onclick="openFeaturePopup('ChatGPT', 'Xác định chủ đề nghiên cứu')"><h3>XÁC ĐỊNH CHỦ ĐỀ NGHIÊN CỨU</h3></div>
+                            <div class="action-card" onclick="openFeaturePopup('ChatGPT', 'Tạo biến số - Codebook nghiên cứu')"><h3>TẠO BIẾN SỐ - CODEBOOK NGHIÊN CỨU</h3></div>
+                        </div>
+                    </div>
+
+                    <!-- BỘ NÚT CỦA NOTEBOOKLM (Có 2 nút) -->
+                    <div id="analysis-note-cards" class="hover-cards-container">
+                        <div class="link-container-right">
+                            <a href="https://notebooklm.google.com/" target="_blank" class="tool-link-btn">Truy cập NotebookLM </a>
+                        </div>
+                        <div style="display: flex; gap: 30px; width: 100%;">
+                            <div class="action-card" onclick="openFeaturePopup('NotebookLM', 'Tóm tắt tài liệu')"><h3>TÓM TẮT TÀI LIỆU</h3></div>
+                            <div class="action-card" onclick="openFeaturePopup('NotebookLM', 'Phân tích và so sánh dữ liệu')"><h3>PHÂN TÍCH VÀ SO SÁNH DỮ LIỆU</h3></div>
+                            <div class="action-card" onclick="openFeaturePopup('NotebookLM', 'Trích xuất dữ liệu số và bảng biểu')"><h3>TRÍCH XUẤT DỮ LIỆU SỐ VÀ BẢNG BIỂU</h3></div>
+                        </div>
+                    </div>
+
+                    <!-- BỘ NÚT CỦA CLAUDE (Có 2 nút) -->
+                    <div id="analysis-claude-cards" class="hover-cards-container">
+                        <div class="link-container-right">
+                            <a href="https://www.claude.ai/" target="_blank" class="tool-link-btn">Truy cập Claude </a>
+                        </div>
+                        <div style="display: flex; gap: 30px; width: 100%;">
+                            <div class="action-card" onclick="openFeaturePopup('Claude', 'Đọc hiểu văn bản dài')"><h3>HƯỚNG DẪN SỬ DỤNG</h3></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. TRÍCH DẪN TLTK -->
+        <section id="nckh-citation">
+            <h2 class="section-title">Hỗ Trợ Trích Dẫn Tài Liệu</h2>
+            <div class="search-layout" onmouseleave="resetHoverState('citation')">
+                <div class="search-sidebar">
+                    <button class="tab-btn citation-tab" data-target="citation-zotero-cards" onmouseenter="showActionCards('citation', 'Zotero', this)">Zotero</button>
+                    <button class="tab-btn citation-tab" data-target="citation-mendeley-cards" onmouseenter="showActionCards('citation', 'Mendeley', this)">Mendeley</button>
+                </div>
+                
+                <div id="citation-section" class="search-content-area">
+                    <div id="citation-placeholder" class="hover-placeholder">
+                        Hãy rê chuột (hover) vào một công cụ bên trái để xem tính năng.
+                    </div>
+
+                    <!-- BỘ NÚT CỦA ZOTERO -->
+                    <div id="citation-zotero-cards" class="hover-cards-container">
+                        <div class="link-container-right">
+                            <a href="https://www.zotero.org/" target="_blank" class="tool-link-btn">Truy cập Zotero </a>
+                        </div>
+                        <div style="display: flex; gap: 30px; width: 100%;">
+                            <div class="action-card" onclick="openFeaturePopup('Zotero', 'Lưu trữ tự động')"><h3>Lưu trữ tự động</h3></div>
+                            <div class="action-card" onclick="openFeaturePopup('Zotero', 'Plugin Word/Docs')"><h3>Plugin Word/Docs</h3></div>
+                        </div>
+                    </div>
+
+                    <!-- BỘ NÚT CỦA MENDELEY -->
+                    <div id="citation-mendeley-cards" class="hover-cards-container">
+                        <div class="link-container-right">
+                            <a href="https://www.mendeley.com/" target="_blank" class="tool-link-btn">Truy cập Mendeley </a>
+                        </div>
+                        <div style="display: flex; gap: 30px; width: 100%;">
+                            <div class="action-card" onclick="openFeaturePopup('Mendeley', 'Mạng lưới học thuật')"><h3>Mạng lưới học thuật</h3></div>
+                            <div class="action-card" onclick="openFeaturePopup('Mendeley', 'Trình đọc PDF tích hợp')"><h3>Trình đọc PDF tích hợp</h3></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LIÊN HỆ -->
+        <section id="contact">
+            <h2 class="section-title">Work & Contact</h2>
+            <div class="contact-container">
+                <div class="contact-box-left">
+                    <h3>Biểu mẫu ý kiến khách hàng</h3>
+                    <form onsubmit="event.preventDefault(); alert('Cảm ơn bạn đã gửi ý kiến!');">
+                        <input type="text" placeholder="Họ và tên" required>
+                        <input type="email" placeholder="Email của bạn" required>
+                        <textarea rows="6" placeholder="Nhập ý kiến của bạn..." required></textarea>
+                        <button type="submit">Gửi Ý Kiến</button>
+                    </form>
+                </div>
+                <div class="contact-box-right">
+                    <div class="video-container">
+                        <iframe width="100%" height="250" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Video cảm ơn" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="contact-info-text">
+                        <h3>Thông tin liên lạc</h3>
+                        <p><strong>Email:</strong> ainghiencuukhoahoc@ozoneplusone.com</p>
+                        <p><strong>SĐT:</strong> 0123 456 789</p>
+                        <p><strong>Địa chỉ:</strong> Thành phố Hồ Chí Minh, Việt Nam</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 Ozone plus one. Trang web thuộc quyền sở hữu của Ozone Plus One.</p>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // 1. Script gõ chữ
+        const textToType = "Hi! Chào mừng bạn đến với\n Trang web hỗ trợ NCKH có tích hợp AI";
+        const typingContainer = document.getElementById("typing-container");
+        let charIndex = 0;
+        function typeWriter() {
+            if (typingContainer && charIndex < textToType.length) {
+                if (textToType.charAt(charIndex) === '\n') { typingContainer.innerHTML += "<br>"; } 
+                else { typingContainer.innerHTML += textToType.charAt(charIndex); }
+                charIndex++;
+                setTimeout(typeWriter, 50);
+            }
+        }
+        window.onload = typeWriter;
+
+        // 2. Chuyển trang & Header
+        document.querySelectorAll('.menu-link').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                if (!targetId || !targetId.startsWith('#')) return;
+                e.preventDefault(); 
+                
+                const targetSection = document.querySelector(targetId);
+                if (targetSection) {
+                    const transitionEl = document.getElementById('page-transition');
+                    transitionEl.classList.add('active'); 
+
+                    setTimeout(() => {
+                        document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+                        targetSection.classList.add('active');
+                        window.scrollTo(0, 0); 
+
+                        const headerLogo = document.getElementById('header-logo');
+                        const headerBack = document.getElementById('header-back');
+                        const dynamicTitle = document.getElementById('dynamic-title');
+
+                        if (targetId === '#home') {
+                            headerLogo.style.display = 'flex';
+                            headerBack.style.display = 'none';
+                        } else {
+                            headerLogo.style.display = 'none';
+                            headerBack.style.display = 'flex';
+                            const title = this.getAttribute('data-title') || this.innerText;
+                            dynamicTitle.innerText = title;
+                        }
+                        setTimeout(() => { transitionEl.classList.remove('active'); }, 200);
+                    }, 400); 
+                }
+            });
+        });
+
+        // 3. Tab Tìm kiếm TLTK 
+        function openSearchTab(evt, tabId) {
+            document.querySelectorAll("#nckh-search .tab-content").forEach(c => c.classList.remove("active"));
+            document.querySelectorAll("#nckh-search .tab-btn").forEach(b => b.classList.remove("active"));
+            document.getElementById(tabId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // 4. Tab Phân tích & Trích dẫn (Logic gọi đúng bộ nút)
+        let isFeatureModalOpen = false;
+
+        function showActionCards(type, toolName, element) {
+            // Lấy ID của khu vực nút cần hiện
+            let targetCardsId = element.getAttribute('data-target');
+            
+            // Tắt placeholder
+            document.getElementById(type + '-placeholder').style.display = 'none';
+            
+            // Ẩn tất cả các bộ nút trong khu vực này
+            document.querySelectorAll(`#${type}-section .hover-cards-container`).forEach(el => el.style.display = 'none');
+            
+            // Hiện đúng bộ nút của công cụ đang hover
+            document.getElementById(targetCardsId).style.display = 'flex';
+            
+            // Làm sáng nút bên trái
+            document.querySelectorAll(`.${type}-tab`).forEach(b => b.classList.remove("active"));
+            element.classList.add("active");
+        }
+
+        function resetHoverState(type) {
+            if (isFeatureModalOpen) return;
+            document.querySelectorAll(`.${type}-tab`).forEach(b => b.classList.remove("active"));
+            document.getElementById(type + '-placeholder').style.display = 'block';
+            document.querySelectorAll(`#${type}-section .hover-cards-container`).forEach(el => el.style.display = 'none');
+        }
+
+        // 5. CƠ SỞ DỮ LIỆU NỘI DUNG POPUP
+        const contentDatabase = {
+            "Gemini": {
+                "Phân tích số liệu": "<span style='color: red; font-weight: bold;'> TH1: Chưa có bất kì thông tin, dữ liệu nào ,tổng quan tài liệu, thiết kế thí nghiệm, khai phá dữ liệu </span> <br> <b>1.Bối cảnh nghiên cứu & vai trò: </b> <br>Bạn là một chuyên gia dữ liệu khoa học cấp cao. Tôi đang lên ý tưởng nghiên cứu về [Tên đề tài/Vật liệu] nhưng chưa tiến hành thí nghiệm và chưa tự có dữ liệu. <br> <b>2. Nhiệm vụ cụ thể: </b> <br>Mục tiêu nhằm khảo sát tiền nghiên cứu từ nền tảng tri thức đã xuất bản. Nhiệm vụ gồm: <br>• Tổng quan cấu trúc dữ liệu nền và hằng số lý thuyết tiêu chuẩn của đối tượng này. <br>• Khởi tạo một tập dữ liệu giả lập lý thuyết mô tả mối liên hệ giữa các biến số chính. <br>• Dự báo trước các điểm bất thường hoặc sai số hệ thống cần phòng tránh khi đo đạc thực tế. <br> <b>3. Phương pháp luận và ràng buộc khoa học: </b> <br>• Lập luận dựa trên nguyên lý khoa học chính xác. Nếu một xu hướng chưa có sự đồng thuận trong giới học thuật, hãy nêu rõ: Vấn đề này chưa có dữ liệu đồng thuận. <br>• Sử dụng thuật ngữ khoa học chuẩn xác, logic và khách quan. <br> <b> 4. Định dạng đầu ra yêu cầu: Hãy trình bày báo cáo theo cấu trúc: </b> <br>• Khung thông số Baseline lý thuyết chuẩn. <br>• Bảng ma trận dữ liệu giả lập (dạng Markdown) và mã Python (Google Colab) để sinh dữ liệu này kèm biểu đồ xu hướng. <br>• Các khuyến nghị phòng tránh sai số dữ liệu khi làm thực nghiệm. <span style='color: red; font-weight: bold;'> <br><br> TH2: Đã thực nghiệm + chưa có tài liệu tham khảo </span> <br> <b>1.Bối cảnh nghiên cứu & vai trò: </b> <br>Bạn là giáo sư nghiên cứu độc lập chuyên phát hiện các hiện tượng vật liệu mới. Tôi đang sở hữu tập dữ liệu thực nghiệm hoàn toàn mới về [Tên đề tài/Vật liệu] bằng phương pháp mới chưa từng có tiền lệ. Dữ liệu thô như sau: [Dán dữ liệu vào đây] <br> <b>2. Nhiệm vụ cụ thể: </b> <br>Mục tiêu của nghiên cứu này là nhằm tìm kiếm các phát hiện mới từ tập dữ liệu chưa có nhiều tài liệu tham khảo trước đây. Nhiệm vụ của bạn bao gồm: <br>• Làm sạch dữ liệu, loại bỏ các giá trị ngoại lai và thiếu sót. <br>•	Tổng quan cấu trúc dữ liệu. <br>• Phân tích thống kê mô tả các biến số chính. <br> • Yêu cầu chuyên sâu: <b>Tìm kiếm các mối quan hệ ngầm, các điểm dị biệt mang tính gợi mở, hoặc các xu hướng mới mà các nghiên cứu trước đây chưa từng đề cập.</b> <br>• Đưa ra các phát hiện cốt lõi và đề xuất các giả thuyết khoa học mới. <br> <b>3. Phương pháp luận và ràng buộc khoa học:</b> <br> • Chỉ phân tích dựa trên dữ liệu được cung cấp, TUYỆT ĐỐI không tự suy diễn hoặc bịa đặt số liệu nằm ngoài tập dữ liệu này. <br> •	Vì chưa có tài liệu đối chiếu trực tiếp, hãy tập trung vào lập luận quy nạp. Nếu dữ liệu không đủ cơ sở để đưa ra kết luận cho một giả thuyết, hãy nêu rõ: 'Dữ liệu chưa đủ bằng chứng để kết luận'. <br>• Sử dụng thuật ngữ khoa học chuẩn xác, lập luận logic và khách quan. <br> <b> 4. Định dạng đầu ra yêu cầu: Hãy trình bày báo cáo theo cấu trúc: </b> <br> • Tóm tắt tổng quan dữ liệu. <br>• Kết quả phân tích thống kê và các mối liên hệ mới phát hiện.<br>• Các phát hiện cốt lõi và đề xuất giả thuyết khoa học. <br>• Hạn chế của dữ liệu và định hướng nghiên cứu thực nghiệm tiếp theo để kiểm chứng giả thuyết, yêu cầu mã code + GG Colab. <br><br> <span style='color: red; font-weight: bold;'>TH3: Đã thực nghiệm + có tài liệu tham khảo</span><br><b>1. Bối cảnh nghiên cứu & vai trò:</b><br>Bạn là chuyên gia phản biện khoa học vật liệu và phân tích dữ liệu cao cấp. Tôi đang nghiên cứu về [Tên đề tài/Vật liệu] và đã có dữ liệu thực nghiệm sau: [Dán dữ liệu vào đây].<br><b>2. Nhiệm vụ cụ thể:</b><br>Mục tiêu nhằm đối chiếu kết quả thực nghiệm với nền tảng lý thuyết đã biết. Nhiệm vụ gồm:<br>• Tổng quan cấu trúc dữ liệu thực nghiệm và sàng lọc các sai số nằm ngoài dải thông thường của vật liệu chuẩn.<br>• Phân tích đối chiếu: So sánh kết quả (đỉnh phổ, hiệu suất...) với cấu trúc hoặc thư viện lý thuyết tiêu chuẩn đã được công bố.<br>• Yêu cầu chuyên sâu: <b>Giải thích cơ chế hóa lý/động học của hệ dựa trên các mô hình lý thuyết kinh điển.</b><br><b>3. Phương pháp luận và ràng buộc khoa học:</b><br>• Chỉ lập luận dựa trên dữ liệu được cung cấp và cơ sở lý luận khoa học chính thống. Không bịa đặt số liệu.<br>• <b>Đưa ra các định hướng hoặc gợi ý cụ thể về từ khóa học thuật và các nguồn tài liệu, tạp chí uy tín (Elsevier, Springer, Nature...) làm cơ sở lý luận đối chiếu.</b><br><b>4. Định dạng đầu ra yêu cầu: Hãy trình bày báo cáo phân tích theo cấu trúc sau:</b><br>• Tóm tắt tổng quan phân bố dữ liệu thực nghiệm.<br>• Kết quả đối chiếu, thảo luận sự tương đồng/khác biệt so với lý thuyết chuẩn.<br>• <b>Khuyến nghị từ khóa học thuật và tài liệu cần tra cứu sâu, yêu cầu mã code + GG Colab.</b> ",
+                "Tóm tắt tài liệu tham khảo": "<span style='color: red; font-weight: bold;'>TH1: Khi đính kèm file</span><br>Hãy đọc kỹ file tài liệu tôi vừa đính kèm ở trên và viết một bản tóm tắt ngắn gọn, súc tích theo cấu trúc sau:<br><b>1.Mục tiêu chính:</b> Tài liệu này nghiên cứu hoặc giải quyết vấn đề gì?<br><b>2.Các luận điểm cốt lõi:</b> Liệt kê 3-5 ý chính quan trọng nhất dưới dạng gạch đầu dòng.<br><b>3.Kết luận/Kết quả:</b> Phát hiện hoặc thông điệp cuối cùng của tác giả là gì?<br>Lưu ý: Chỉ tóm tắt dựa trên thông tin có trong file, giữ nguyên các số liệu hoặc thuật ngữ quan trọng nếu có. <br><br><span style='color: green; font-weight: bold;'>TH2: Khi Copy – paste đoạn văn bản trực tiếp</span><br>Hãy đọc đoạn văn bản được cung cấp dưới đây và tóm tắt lại các ý chính một cách rõ ràng, dễ hiểu nhất dưới dạng các đầu dòng (bullet points).<br><b>Văn bản cần tóm tắt:</b> \"...\" [Dán đoạn văn bản hoặc trích dẫn tài liệu của bạn vào đây]<br><b>Yêu cầu:</b> Loại bỏ các chi tiết rườm rà, chỉ giữ lại bản chất của vấn đề và kết luận của đoạn văn. <br> <br><span style='color: #0056b3; font-weight: bold;'>TH3: Khi đính kèm file</span><br>Hãy truy cập vào đường link này: [Chèn link trang web/bài báo vào đây]. Sau đó, hãy đọc và tóm tắt lại nội dung của bài viết theo cấu trúc:<br><b>Tổng quan:</b> Bài viết nói về chủ đề gì trong 1-2 câu.<br><b>Các nội dung chính:</b> Các luận điểm hoặc thông tin quan trọng nhất được nhắc đến.<br><b>Thông điệp/Kết luận:</b> Điểm mấu chốt mà người đọc cần nắm được là gì?<br><b>Lưu ý:</b> Nếu link bị chặn hoặc không truy cập được, hãy báo lại cho tôi biết ngay.",
+            },
+            "ChatGPT": {
+                "Xác định chủ đề nghiên cứu": "<span style='color: red; font-weight: bold;'>Prompt 1: Xác định chủ đề nghiên cứu</span><br><br>Bạn là trợ lý [DÁN VÀO ĐÂY].<br>Ý tưởng nghiên cứu: [DÁN VÀO ĐÂY]<br><br>Hãy gợi ý 5 đề tài nghiên cứu. Trình bày theo mẫu:<br><b>Đề tài 1</b><br>- <b>Tên đề tài:</b><br>- Outcome chính:<br>- Đối tượng nghiên cứu:<br><br>Lặp lại đến Đề tài 5. Không bịa số liệu; nếu thiếu thông tin, viết tổng quát và ghi điểm cần thêm.",
+                "Tạo biến số - Codebook nghiên cứu": "<span style='color: red; font-weight: bold;'>Prompt 2: Tạo biến số - codebook nghiên cứu</span><br><br>Bạn là trợ lý [ PHÙ HỢP VỚI LĨNH VỰC NGHIÊN CỨU ].<br>Ý TƯỞNG NGHIÊN CỨU: [ DÁN Ý TƯỞNG NGHIÊN CỨU Ở ĐÂY ]<br><br><b>NHIỆM VỤ</b><br>Từ ý tưởng trên, hãy:<br>1) Tự suy ra một câu hỏi PEO ngắn gọn (1 dòng) phù hợp với ý tưởng.<br>2) Tạo danh sách biến số cần thu thập theo …….nhóm:<br>(1)…………………………….<br>(2)…………………………....<br>(3) ……………………………<br>……<br><br><b>YÊU CẦU ĐẦU RA</b><br>- Xuất dưới dạng bảng codebook với các cột:<br>Định nghĩa biến | Loại biến (tiếng Việt) | Khoảng hợp lệ | Cách thu thập | Lỗi hay gặp<br>- Tối thiểu 15 biến (càng thực tế càng tốt).<br>- Không bịa số liệu.<br><br><b>RÀNG BUỘC</b><br>- Nếu ý tưởng chưa đủ rõ để chọn biến hợp lý, hãy hỏi lại tối đa 5 câu ngắn trước khi lập codebook.<br>- Nếu cần giả định (range hợp lệ, coding…), hãy ghi rõ là “giả định” để tôi chỉnh theo bối cảnh.",
+            },
+            "NotebookLM": {
+                "Tóm tắt tài liệu": "<span style='color: red; font-weight: bold;'>Tóm tắt tài liệu</span><br><br>Dựa hoàn toàn vào các tài liệu đã được chọn, hãy viết một bản tóm tắt phân tích chuyên sâu theo cấu trúc sau:<br><b>1. Tổng quan nghiên cứu:</b> Mục đích chính và bối cảnh của các tài liệu này là gì?<br><b>2. Các luận điểm và kết quả cốt lõi:</b> Liệt kê các phát hiện, số liệu hoặc luận điểm quan trọng nhất dưới dạng gạch đầu dòng.<br><b>3. Phương pháp luận:</b> Các tài liệu này đã sử dụng phương pháp hoặc mô hình nào để chứng minh?<br><br><b>Yêu cầu về trích nguồn:</b><br>• Hãy chèn các ký hiệu trích dẫn ngay sau mỗi thông tin hoặc số liệu được trích xuất.<br>• Ở cuối câu trả lời, hãy tạo một mục có tên là 'Danh mục tài liệu trích dẫn trong bài' và liệt kê rõ: [Tên tài liệu / Tên chương / Đoạn văn] mà bạn đã dùng để tổng hợp cho các ý ở trên.",
+                "Phân tích và so sánh dữ liệu": "<span style='color: red; font-weight: bold;'>Phân tích + so sánh dữ liệu</span><br><br><b>Vai trò:</b> Hãy đóng vai trò là một nhà phê bình học thuật. Hãy phân tích, so sánh và đối chiếu tất cả các tài liệu đang được bật trong nguồn (sources) của tôi.<br><br><b>Yêu cầu:</b><br>• Các tài liệu này có điểm chung nào về mặt kết luận hoặc góc nhìn không?<br>• Có sự mâu thuẫn, khác biệt hoặc tranh biện nào giữa các tác giả về cùng một vấn đề không?<br>• Xu hướng chung mà các tài liệu này đang hướng tới là gì?<br><br><b>Lưu ý:</b> Phải chỉ rõ luận điểm nào thuộc về tài liệu nào bằng tính năng trích nguồn của NotebookLM để tôi có thể click vào kiểm tra nguồn gốc.",
+                "Trích xuất dữ liệu số và bảng biểu": "<span style='color: red; font-weight: bold;'>Trích xuất dữ liệu số + bảng biểu</span><br><br><b>Yêu cầu:</b> Hãy quét toàn bộ dữ liệu từ các nguồn đã chọn và bóc tách ra tất cả các số liệu thống kê, dữ liệu định lượng, hoặc kết quả định lượng quan trọng nhất.<br><br>Hãy trình bày các dữ liệu này dưới dạng một Bảng tổng hợp, gồm 3 cột:<br>• Số liệu / Kết quả định lượng<br>• Ý nghĩa của số liệu đó trong nghiên cứu<br>• Nguồn trích dẫn cụ thể (Tên file và số trang nếu có).<br><br><b>Yêu cầu bổ sung:</b> Chỉ trích xuất dữ liệu thực tế có trong nguồn, không tự ý suy diễn hoặc làm tròn số khác đi."
+            },
+            "Claude": {
+                "Đọc hiểu văn bản dài": "<b>Claude</b> có khả năng đọc hiểu ngữ cảnh khổng lồ và tư duy logic cực kỳ sắc bén.<br><br>Bạn có thể đưa cho Claude hàng chục báo cáo tài chính hoặc bộ dữ liệu thô, Claude sẽ giúp bạn phân tách, đối chiếu thông tin và phát hiện các mẫu (patterns) dữ liệu phức tạp.",
+                "Biên tập văn phong": "Được đánh giá là AI có văn phong tự nhiên và 'giống con người' nhất hiện nay.<br><br><b>Claude</b> vô cùng phù hợp để đọc các luận văn dài và tạo ra các bản tóm tắt tinh tế, giữ nguyên được ý nghĩa chuyên môn mà không bị cảm giác 'văn mẫu robot'."
+            },
+            "Zotero": {
+                "Lưu trữ tự động": "<b>Zotero</b> là một phần mềm mã nguồn mở hoàn toàn miễn phí.<br><br>Nó giúp bạn thu thập, sắp xếp và lưu trữ hàng ngàn bài báo khoa học offline. Bạn có thể gắn thẻ (tags), ghi chú và phân loại tài liệu vào các thư mục vô cùng khoa học và dễ tìm kiếm.",
+                "Plugin Word/Docs": "Chỉ với một plugin cài vào trình duyệt và Word, <b>Zotero</b> cho phép bạn tạo trích dẫn tự động theo hơn 10,000 định dạng chuẩn quốc tế (APA, MLA, IEEE, Harvard...) chỉ bằng một cú click chuột."
+            },
+            "Mendeley": {
+                "Mạng lưới học thuật": "<b>Mendeley</b> nổi bật với khả năng đồng bộ hóa đám mây và mạng lưới kết nối học thuật.<br><br>Giúp bạn dễ dàng khám phá các tài liệu mới từ cộng đồng nghiên cứu cùng chuyên ngành.",
+                "Trình đọc PDF tích hợp": "Nó tích hợp sẵn một trình đọc PDF rất tốt, cho phép bạn highlight (tô sáng), thêm chú thích trực tiếp trên tài liệu và chia sẻ thư viện ghi chú với nhóm nghiên cứu của mình."
+            }
+        };
+
+        // 6. Hiển thị Popup 
+        function openFeaturePopup(toolName, actionName) {
+            isFeatureModalOpen = true; 
+            const modal = document.getElementById('feature-modal');
+            const title = document.getElementById('feature-modal-title');
+            const desc = document.getElementById('feature-modal-desc');
+
+            title.innerText = toolName + " - " + actionName;
+            
+            if (contentDatabase[toolName] && contentDatabase[toolName][actionName]) {
+                desc.innerHTML = contentDatabase[toolName][actionName];
+            } else {
+                desc.innerHTML = `Đang cập nhật tính năng ${actionName} cho ${toolName}...`;
+            }
+
+            modal.classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+            if (modalId === 'feature-modal') {
+                isFeatureModalOpen = false;
+            }
+        }
+
+        document.querySelectorAll('.member').forEach(member => {
+            member.addEventListener('click', function() {
+                document.getElementById('modal-name').innerText = this.getAttribute('data-name');
+                document.getElementById('modal-slogan').innerText = this.getAttribute('data-slogan');
+                document.getElementById('modal-desc').innerText = this.getAttribute('data-desc');
+                document.getElementById('member-modal').classList.add('show');
+            });
+        });
+
+        if(document.getElementById('team-trigger')) { 
+            document.getElementById('team-trigger').addEventListener('click', () => { 
+                document.getElementById('team-modal').classList.add('show'); 
+            }); 
+        }
+
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal-overlay')) {
+                e.target.classList.remove('show');
+                if (e.target.id === 'feature-modal') isFeatureModalOpen = false;
+            }
+        });
+
+        function openModal(element) {
+    // 1. Lấy thông tin từ card được chọn
+    const imgSrc = element.getAttribute('data-img');
+    const name = element.getAttribute('data-name');
+    
+    // 2. Gán thông tin vào Modal
+    document.getElementById('modal-cv-img').src = imgSrc;
+    document.getElementById('modal-name').textContent = name;
+    
+    // 3. Hiển thị modal (theo class hoặc style của bạn)
+    document.getElementById('myModal').style.display = 'block';
+}
+    </script>
+</body>
+</html>
