@@ -24,6 +24,17 @@
             /* Khoảng cách dòng 1.8 giúp chữ không dính sát vào nhau */
             line-height: 1.8; 
         }
+
+        .home-illustration {
+            max-width: 1800px; /* Giới hạn độ rộng tối đa của ảnh */
+            width: 100%; /* Ảnh sẽ tự thu nhỏ nếu màn hình điện thoại bé */
+            height: auto;
+            margin: 20px auto 0 auto; /* Cách bảng chữ phía trên 20px và căn giữa 2 bên */
+            display: block;
+            border-radius: 15px; /* Bo góc ảnh cho đồng bộ với thiết kế */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2); /* Tạo bóng đổ nhẹ cho ảnh nổi bật */
+            border: 10px solid var(--beige-light); /* Tạo viền trắng giống bảng chữ */
+        }
         .tool-card ul li {
         font-size: 23px; /* Tăng giảm con số này tùy theo độ lớn bạn muốn */
         line-height: 1.6; /* Tăng khoảng cách giữa các dòng để dễ nhìn hơn (tùy chọn) */
@@ -364,6 +375,7 @@
         <!-- TRANG CHỦ -->
         <section id="home" class="active">
             <div id="typing-container"></div>
+            <img src="hinhnen.png" alt="Hình nền" class="home-illustration">
         </section>
 
         <!-- VỀ CHÚNG TÔI -->
